@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { ArrowUp, Settings as SettingsIcon, Trash2 } from 'lucide-react';
 import { api, isFirefox } from '../shared/browser';
-import { siteMatches } from '../shared/site';
 import type { Settings, SiteState } from '../shared/types';
 import { send } from './client';
 import { Setup } from './Setup';
+import { requestChangeAccess } from './permissions';
 
 const emptyState: SiteState = { hostname: null, tabId: null, site: null, pending: null, hasPermission: false, scriptAccess: false };
 
@@ -109,11 +109,11 @@ export function App() {
     setError(''); setNotice(''); setBusyHost(host); setOperation(action);
     try {
       if (action === 'install' || (action === 'toggle' && !state.site?.enabled)) {
-        const allowed = await api.permissions.request({
-          origins: siteMatches(host),
-          ...(isFirefox() && (action === 'install' || state.site?.js) ? { permissions: ['userScripts'] } : {}),
-        });
-        if (!allowed) throw new Error('Permission was declined. Allow access to enable this site’s changes.');
+        const ready = await requestChangeAccess(state, action === 'install' || Boolean(state.site?.js));
+        if (!ready) {
+          if (hostname.current === host) setNotice(`Site access allowed. ${action === 'install' ? 'Click Install site script' : 'Enable site changes'} again to allow user scripts.`);
+          return;
+        }
       }
       const request = action === 'toggle'
         ? { type: 'site:toggle' as const, hostname: host, enabled: !state.site?.enabled }

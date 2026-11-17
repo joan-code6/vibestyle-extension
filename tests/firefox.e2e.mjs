@@ -33,7 +33,8 @@ try {
   await driver.executeAsyncScript(`
     const id = arguments[0], done = arguments[arguments.length - 1];
     const { ExtensionPermissions } = ChromeUtils.importESModule('resource://gre/modules/ExtensionPermissions.sys.mjs');
-    ExtensionPermissions.add(id, { permissions: ['userScripts'], origins: ['http://127.0.0.1/*', 'https://127.0.0.1/*'] }, WebExtensionPolicy.getByID(id).extension).then(() => done(true), e => done(String(e)));
+    // Screenshot capture requires all_urls; this is an isolated test profile.
+    ExtensionPermissions.add(id, { permissions: ['userScripts'], origins: ['<all_urls>'] }, WebExtensionPolicy.getByID(id).extension).then(() => done(true), e => done(String(e)));
   `, id);
   await driver.setContext(firefox.Context.CONTENT);
   await driver.get(url);
@@ -43,8 +44,14 @@ try {
   const sidebarHandle = await driver.getWindowHandle();
   const invoke = async request => {
     const reply = await driver.executeAsyncScript(`
-      browser.runtime.sendMessage(arguments[0]).then(arguments[arguments.length - 1], e => arguments[arguments.length - 1]({ ok: false, error: String(e) }));
+      const request = arguments[0], done = arguments[arguments.length - 1];
+      // The real sidebar leaves the website active. An extension tab does not.
+      (async () => {
+        if (request.type === 'site:generate') await browser.tabs.update(request.tabId, { active: true });
+        return browser.runtime.sendMessage(request);
+      })().then(done, e => done({ ok: false, error: String(e) }));
     `, request);
+    await driver.switchTo().window(sidebarHandle);
     if (!reply?.ok) throw new Error(reply?.error ?? 'No extension response.');
     return reply.data;
   };
@@ -62,7 +69,7 @@ try {
   }
   async function verify(condition, label) {
     await driver.switchTo().window(fixtureHandle);
-    await driver.wait(async () => driver.executeScript(condition), 10_000, label);
+    await driver.wait(async () => driver.executeScript(`if (document.readyState !== "complete" || !document.querySelector("aside")) return false; ${condition}`), 10_000, label);
     await driver.switchTo().window(sidebarHandle);
   }
   await fixtureProvider({ summary: 'Less clutter in Firefox.', css: 'aside { display: none !important; }', js: '' });

@@ -8,7 +8,7 @@ A minimal Firefox-first website customizer, with a Chrome build. Connect an AI p
 
 Requires Firefox 142 or newer. No Node.js or Mozilla developer account is needed to install a release.
 
-1. Download **[vibestyle-0.1.1.xpi](https://github.com/joan-code6/vibestyle-extension/releases/download/v0.1.1/vibestyle-0.1.1.xpi)** from the [latest release](https://github.com/joan-code6/vibestyle-extension/releases/latest). Choose the `.xpi` installer, not the source ZIP.
+1. Download **[vibestyle-0.1.2.xpi](https://github.com/joan-code6/vibestyle-extension/releases/download/v0.1.2/vibestyle-0.1.2.xpi)** from the [latest release](https://github.com/joan-code6/vibestyle-extension/releases/latest). Choose the `.xpi` installer, not the source ZIP.
 2. In Firefox, open `about:addons` (or press **Ctrl+Shift+A**).
 3. Click the **gear menu** → **Install Add-on From File…**, select the downloaded `.xpi`, and accept Firefox's installation prompt.
 4. Click the extensions puzzle icon in the toolbar, then **VibeStyle**, to open its sidebar. Choose your AI provider, enter your provider API key, and select a model.
@@ -95,7 +95,7 @@ npm run test:firefox
 
 `test:e2e` uses a real Chromium extension, a local fixture page with strict CSP, and fixture provider responses. It checks setup, CSS, privacy filtering, browser-restart persistence, explicit script installation, JavaScript cleanup, site controls, narrow/dark layouts, and provider error recovery. It uses an installed Playwright Chromium or `CHROMIUM_EXECUTABLE`; otherwise install one with `npx playwright install chromium`.
 
-`test:firefox` installs a temporary build into an isolated headless Firefox profile using Selenium. It checks the actual Firefox APIs for CSS/JavaScript installation, persistence on reload, toggling, and deletion. Firefox must be installed (or set `FIREFOX_EXECUTABLE`); Selenium Manager obtains geckodriver if needed. Both test fixtures pregrant access only to localhost and use fake API keys. **No paid/live inference requests are made by the tests.** Test screenshots and profiles are under ignored `test-results/`.
+`test:firefox` installs a temporary build into an isolated headless Firefox profile using Selenium. It checks the actual Firefox APIs for CSS/JavaScript installation, persistence on reload, toggling, and deletion. Firefox must be installed (or set `FIREFOX_EXECUTABLE`); Selenium Manager obtains geckodriver if needed. Test fixtures use fake API keys and localhost pages. The isolated Firefox test profile pregrants all-site access to permit screenshot capture. **No paid/live inference requests are made by the tests.** Test screenshots and profiles are under ignored `test-results/`.
 
 Mozilla’s linter reports two `innerHTML` warnings inside the bundled, unmodified React DOM implementation. Application code renders model/user text as text and does not use `innerHTML` or `dangerouslySetInnerHTML`. There are no manifest errors; store approval/signing remains a separate release step. `npm audit --omit=dev` checks shipped dependencies; upstream development-tool advisories may still appear in a full audit.
 
