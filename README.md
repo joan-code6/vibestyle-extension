@@ -8,12 +8,14 @@ A minimal Firefox-first website customizer, with a Chrome build. Connect an AI p
 
 Requires Firefox 142 or newer. No Node.js or Mozilla developer account is needed to install a release.
 
-1. Download **[vibestyle-0.1.2.xpi](https://github.com/joan-code6/vibestyle-extension/releases/download/v0.1.2/vibestyle-0.1.2.xpi)** from the [latest release](https://github.com/joan-code6/vibestyle-extension/releases/latest). Choose the `.xpi` installer, not the source ZIP.
+1. Open the **[latest release](https://github.com/joan-code6/vibestyle-extension/releases/latest)** and download its **`vibestyle-<version>.xpi`** asset. Choose the `.xpi` installer, not the source ZIP.
 2. In Firefox, open `about:addons` (or press **Ctrl+Shift+A**).
 3. Click the **gear menu** → **Install Add-on From File…**, select the downloaded `.xpi`, and accept Firefox's installation prompt.
 4. Click the extensions puzzle icon in the toolbar, then **VibeStyle**, to open its sidebar. Choose your AI provider, enter your provider API key, and select a model.
 
 The release installer is signed by Mozilla and stays installed across browser and computer restarts. It is self-distributed through GitHub rather than a public Mozilla store listing. Future updates currently require installing a newer signed `.xpi` from Releases.
+
+To update an existing signed installation, install the newer `.xpi` using the same steps. Do not remove VibeStyle first; updating the same add-on preserves its local settings, saved changes, and pending scripts.
 
 If you previously loaded VibeStyle through `about:debugging`, that was a temporary development installation. Close and reopen Firefox to clear that temporary installation, then install the signed release above. You may need to set up your provider and site changes again if Firefox removed the temporary add-on's data.
 
