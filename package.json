@@ -1,0 +1,43 @@
+{
+  "name": "vibestyle-extension",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit && node scripts/build.mjs",
+    "build:firefox": "tsc --noEmit && node scripts/build.mjs firefox",
+    "build:chrome": "tsc --noEmit && node scripts/build.mjs chrome",
+    "dev": "vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "node tests/extension.e2e.mjs",
+    "test:firefox": "node tests/firefox.e2e.mjs",
+    "lint:firefox": "web-ext lint --source-dir dist/firefox",
+    "prepare:firefox": "node scripts/release-firefox.mjs --prepare-only",
+    "release:firefox": "node scripts/release-firefox.mjs"
+  },
+  "dependencies": {
+    "acorn": "^8.15.0",
+    "css-tree": "^3.1.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.1.0",
+    "@types/css-tree": "^2.3.10",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "esbuild": "^0.25.0",
+    "fflate": "^0.8.2",
+    "playwright": "^1.58.0",
+    "selenium-webdriver": "^4.35.0",
+    "sharp": "^0.35.5",
+    "typescript": "^5.9.0",
+    "vite": "^7.0.0",
+    "vitest": "^5.1.0",
+    "web-ext": "^10.8.0"
+  }
+}
